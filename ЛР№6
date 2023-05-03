@@ -1,0 +1,233 @@
+///////////////////////////////////////////////////////////////6.1
+#include<iostream>
+using namespace std;
+
+class Figure {
+public:
+    virtual double getArea() = 0;
+};
+
+class Rectangle : public Figure {
+private:
+    double length;
+    double width;
+public:
+    Rectangle(double l, double w) {
+        length = l;
+        width = w;
+    }
+
+    virtual double getArea() override {  
+        cout << "Rectangle: " << endl;
+        return length * width;
+    }
+};
+
+class Circle : public Figure {
+private:
+    const double PI = 3.1415926535;
+    double radius;
+
+public:
+    Circle(double r) {
+        radius = r;
+    }
+
+    virtual double getArea()override { 
+        cout << "Circle: " << endl;
+        return (PI * radius * radius);
+    }
+};
+
+class RightTriangle : public Figure {
+private:
+    int base_;
+    int height_;
+public:
+    RightTriangle(int b, int h) {
+        base_ = b;   height_ = h;
+    }
+
+    virtual double getArea() override {  
+        cout << "RightTriangle: " << endl;
+        return ((base_ * height_) / 2);
+    }
+};
+
+class Trapezoid :public Figure {
+private:
+    int a_, b_, h_;
+public:
+
+    Trapezoid(int a, int  b, int h) {
+        a_ = a; b_ = b; h_ = h;
+    }
+
+    virtual double getArea() override { 
+        cout << "Trapezoid: " << endl;
+        return ((a_ + b_) * h_) / 2;
+    }
+};
+
+void printArea(Figure& fig) {
+    cout << "Square: " << fig.getArea() << endl;
+}
+
+int main() {
+    Rectangle rect(5, 10);
+    Circle circ(7);
+    RightTriangle rtrig(4, 6);
+    Trapezoid trapez(3, 4, 8);
+
+    printArea(rect);    
+    printArea(circ);    
+    printArea(rtrig);  
+    printArea(trapez);	
+
+    return 0;
+}
+//////////////////////////////////////////////////////////////////6.2
+#include <iostream>
+#include <Windows.h>
+using namespace std;
+// Без віртуального успадкування
+class Base {
+public:
+    int base_data;
+};
+
+class Derived1 : public Base {
+public:
+    int derived1_data;
+};
+
+class Derived2 : public Base {
+public:
+    int derived2_data;
+};
+
+class Derived3 : public Derived1 {
+public:
+    int derived3_data;
+};
+
+class Derived4 : public Derived2 {
+public:
+    int derived4_data;
+};
+
+class Derived5 : public Derived3, public Derived4, public Base {
+public:
+    int derived5_data;
+};
+
+// З віртуальним успадкуванням
+class VBase {
+public:
+    int vbase_data;
+};
+
+class VDerived1 : virtual public VBase {
+public:
+    int vderived1_data;
+};
+
+class VDerived2 : virtual public VBase {
+public:
+    int vderived2_data;
+};
+
+class VDerived3 : virtual public VDerived1 {
+public:
+    int vderived3_data;
+};
+
+class VDerived4 : virtual public VDerived2 {
+public:
+    int vderived4_data;
+};
+
+class VDerived5 : virtual public VDerived3, virtual public VDerived4, virtual public VBase {
+public:
+    int vderived5_data;
+};
+
+int main() {
+    SetConsoleOutputCP(1251);
+    Derived1 d1;
+    Derived2 d2;
+    Derived3 d3;
+    Derived4 d4;
+    Derived5 d5;
+    VDerived1 vd1;
+    VDerived2 vd2;
+    VDerived3 vd3;
+    VDerived4 vd4;
+    VDerived5 vd5;
+   
+    cout << "Розмір об'єкта Derived1 (без віртуального успадкування): " << sizeof(d1) << endl;
+    cout << "Розмір об'єкта Derived2 (без віртуального успадкування): " << sizeof(d2) << endl;
+    cout << "Розмір об'єкта Derived3 (без віртуального успадкування): " << sizeof(d3) << endl;
+    cout << "Розмір об'єкта Derived4 (без віртуального успадкування): " << sizeof(d4) << endl;
+    cout << "Розмір об'єкта Derived5 (без віртуального успадкування): " << sizeof(d5) << endl;
+    cout << "Розмір об'єкта VDerived1 (з віртуальним успадкуванням): " << sizeof(vd1) << endl;
+    cout << "Розмір об'єкта VDerived2 (з віртуальним успадкуванням): " << sizeof(vd2) << endl;
+    cout << "Розмір об'єкта VDerived3 (з віртуальним успадкуванням): " << sizeof(vd3) << endl;
+    cout << "Розмір об'єкта VDerived4 (з віртуальним успадкуванням): " << sizeof(vd4) << endl;
+    cout << "Розмір об'єкта VDerived5 (з віртуальним успадкуванням): " << sizeof(vd5) << endl;
+
+    return 0;
+}
+////////////////////////////////////////////////////////////////////////////6.3
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Student {
+protected:
+    string name;
+    int age;
+public:
+    Student(const string& name, int age) : name(name), age(age) {}
+    virtual ~Student() {}
+
+    friend ostream& operator<<(ostream& os, const Student& student) {
+        os << "Student name: " << student.name << endl << "age: " << student.age << endl;
+        return os;
+    }
+};
+
+class FamilyFather {
+protected:
+    string familyName;
+    int childrenCount;
+    int age2;
+public:
+    FamilyFather(const string& familyName, int childrenCount, int age2) : familyName(familyName), childrenCount(childrenCount), age2(age2){}
+    virtual ~FamilyFather() {}
+
+    friend ostream& operator<<(ostream& os, const FamilyFather& father) {
+        os << "Family father name: " << father.familyName << endl << "age: " << father.age2 << endl << "children count: " << father.childrenCount << endl;
+        return os;
+    }
+};
+
+class StudentFamilyFather : public Student, public FamilyFather {
+public:
+    StudentFamilyFather(const string& name, int age, const string& familyName, int childrenCount, int age2)
+        : Student(name, age), FamilyFather(familyName, childrenCount, age2) {}
+
+    ~StudentFamilyFather() {}
+
+    friend ostream& operator<<(ostream& os, const StudentFamilyFather& studentFather) {
+        os << static_cast<const Student&>(studentFather) << static_cast<const FamilyFather&>(studentFather);
+        return os;
+    }
+};
+
+int main() {
+    StudentFamilyFather sf("Bohdan", 18, "Bestanchuk", 2, 50);
+    cout << sf << endl;
+
+    return 0;
+}
